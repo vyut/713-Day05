@@ -13,4 +13,9 @@ export interface Event {
     organizerId: number | null;
     organizer: Organizer | null;
     participants: Participant[];
-  }
+}
+  
+export interface PageEvent {
+  count: number;
+  events: Event[];
+}
