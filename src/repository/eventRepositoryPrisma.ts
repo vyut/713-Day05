@@ -98,7 +98,7 @@ export async function getAllEventsWithOrganizerPagination(
       }    
   });
   const count = await prisma.event.count({ where });
-    return { count, events } as PageEvent;
+  return { count, events } as PageEvent;
 }
 
 export function countEvent() {
