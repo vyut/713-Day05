@@ -66,3 +66,22 @@ export function addEvent(newEvent: Event) {
     }
   });
 }
+
+export function getAllEventsWithOrganizerPagination(pageSize: number, pageNo: number) {
+  return prisma.event.findMany({
+    skip: pageSize * (pageNo - 1),
+    take: pageSize,
+    select: {
+      id: true,
+      category: true,
+      organizerId: false,
+      organizer: {
+        select: {
+          name: true
+        }
+      }
+    }
+    
+  });
+}
+

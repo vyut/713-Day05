@@ -36,6 +36,11 @@ app.post('/upload', upload.single('file'), async (req: any, res: any) => {
     res.status(500).send('Error uploading file.');
   }
 });
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+})
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
