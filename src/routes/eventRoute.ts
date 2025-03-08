@@ -5,37 +5,29 @@ import exp from "constants";
 const router = express.Router();
 
 router.get("/", async(req, res) => {
-    if (req.query.pageSize && req.query.pageNo) {
-        const pageSize = parseInt(req.query.pageSize as string) || 3;
-        const pageNo = parseInt(req.query.pageNo as string) || 1;
-        const keyword = req.query.keyword as string;
+    const pageSize = parseInt(req.query.pageSize as string) || 3;
+    const pageNo = parseInt(req.query.pageNo as string) || 1;
+    const keyword = req.query.keyword as string;
 
-        try {
-            const result = await service.getAllEventsWithPagination(keyword, pageSize, pageNo);
-            if (result.events.length === 0) {
-                res.status(404).send("No events found");
-                return;
-            }
-
-            res.setHeader("x-total-count", result.count.toString());
-            res.json(result.events);
-        } catch (error) {
-            if (pageNo < 1 || pageSize < 1) {
-                res.status(400).send("Invalid pageNo or pageSize");
-            } else {
-                res.status(500).send("Internal Server Error");
-            }
+    try {
+        const result = await service.getAllEventsWithPagination(keyword, pageSize, pageNo);
+        if (result.events.length === 0) {
+            res.status(404).send("No events found");
             return;
-        } finally {
-            console.log(`Request is completed. with pageNo=${pageNo} and pageSize=${pageSize}`);
         }
 
-    } else if (req.query.category) {
-        const category = req.query.category;
-        const filteredEvents = await service.getEventByCategory(category as string);
-        res.json(filteredEvents);
-    } else {
-    res.json(await service.getAllEvents());
+        res.setHeader("x-total-count", result.count.toString());
+        res.setHeader("Access-Control-Expose-Headers", "x-total-count"); // to expose the custom header
+        res.json(result.events);
+    } catch (error) {
+        if (pageNo < 1 || pageSize < 1) {
+            res.status(400).send("Invalid pageNo or pageSize");
+        } else {
+            res.status(500).send("Internal Server Error");
+        }
+        return;
+    } finally {
+        console.log(`Request is completed. with pageNo=${pageNo} and pageSize=${pageSize}`);
     }
 });
 
