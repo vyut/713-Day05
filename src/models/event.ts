@@ -1,5 +1,5 @@
 import type { Organizer } from "./organizer";
-import type {Participant } from "./participant";
+import type { Participant } from "./participant";
 
 export interface Event {
     id: number;
